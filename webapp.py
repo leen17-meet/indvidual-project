@@ -1,6 +1,7 @@
-from flask import Flask, render_templte, request, redirect, url_for 
+from flask import Flask, render_template, request, flash, redirect, url_for
 
 app = Flask(__name__)
+app.secret_key = "MY_SUPER_SECRET_KEY"
 
 from db import *
 from sqlalchemy import create_engine
@@ -46,12 +47,11 @@ def new():
 		password = request.form['password']
 		if name == "" or email == "" or password == "":
 			flash("Your form is missing arguments")
-			return redirect(url_for('newCustomer'))
-		if session.query(Userr).filter_by(email = email).first() is not None:
+			return redirect(url_for('new'))
+		if session.query(User).filter_by(email = email).first() is not None:
 			flash("A user with this email address already exists")
 			return redirect(url_for('new'))
 		user = User(name = name, gender=gender, email=email)
-		user.hash_password(password)
 		session.add(user)
 		session.commit()
 		flash("User Created Successfully!")
@@ -67,6 +67,17 @@ def science():
 @app.route('/literature')
 def literature():
 	return
+
+@app.route('/logout', methods = ['POST'])
+def logout():
+	return
+
+def verify_password(email, password):
+	user = session.query(User).filter_by(email = email).first()
+	if not user or not user.verify_password(password):
+		return False
+	g.user = user
+	return True
 
 if __name__ == '__main__':
 	app.run()
