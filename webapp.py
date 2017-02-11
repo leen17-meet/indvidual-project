@@ -12,11 +12,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-@app.route('/')
-def home():
-	return render_template("home.html")
-
-@app.route('/login', methods = ['GET', 'POST'])
+@app.route('/', methods = ['GET', 'POST'])
 def login():
 	if request.method == 'GET':
 		return render_template('login.html')
@@ -38,6 +34,10 @@ def login():
 			return redirect(url_for('login'))
 
 	return render_template('login.html')
+
+@app.route('/home')
+def home():
+	return render_template("home.html")
 
 @app.route('/new', methods= ['GET', 'POST'])
 def new():
@@ -61,13 +61,33 @@ def new():
 		return render_template('new.html')
 
 
-@app.route('/science')
+@app.route('/science', methods=['GET'], ['POST'])
 def science():
-	return
+	if request.method == 'GET':
+		science_list = session.query(Science).all()
+		return render_template('science.html', science = science_list)
+	else:
+		new_name = request.form['Name']
+		new_subject = request.form['Subject']
+		new_information = request.form['Information']
+		news = Science( name = new_name, subject = new_subject, information = new_information)
+		session.add(news)
+		session.commit()
+		return redirect(url_for('science'))
 
 @app.route('/literature')
 def literature():
-	return
+	if request.method == 'GET':
+		literature_list = session.query(Literature).all()
+		return render_template('literature.html', science = literature_list)
+	else:
+		new_name = request.form['Name']
+		new_subject = request.form['Subject']
+		new_information = request.form['Information']
+		newl = Literature( name = new_name, subject = new_subject, information = new_information)
+		session.add(newl)
+		session.commit()
+		return redirect(url_for('literature'))
 
 @app.route('/logout', methods = ['POST'])
 def logout():
