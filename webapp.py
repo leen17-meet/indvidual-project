@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, g, session as login_session
+from db import *
 
 app = Flask(__name__)
 app.secret_key = "MY_SUPER_SECRET_KEY"
@@ -70,7 +71,14 @@ def literature():
 
 @app.route('/logout', methods = ['POST'])
 def logout():
-	return
+	if 'id' not in login_session:
+		flash("You must be logged in order to log out")
+		return redirect(url_for('login'))
+	del login_session['name']
+	del login_session['email']
+	del login_session['id']
+	flash("Logged Out Successfully")
+	return redirect(url_for('home'))
 
 def verify_password(email, password):
 	user = session.query(User).filter_by(email = email).first()

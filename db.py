@@ -17,7 +17,7 @@ class User(Base):
 		self.password_hash = pwd_context.encrypt(password)
 
 	def verify_password(self, password):
-		return pwd_context.verify(password, self.password_hash)
+		return pwd_context.verify(password, self.password)
 
 class Science(Base):
 	__tablename__ = "science"
