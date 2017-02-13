@@ -61,7 +61,7 @@ def new():
 		return render_template('new.html')
 
 
-@app.route('/science', methods=['GET'], ['POST'])
+@app.route('/science', methods=['GET', 'POST'])
 def science():
 	if request.method == 'GET':
 		science_list = session.query(Science).all()
@@ -75,7 +75,7 @@ def science():
 		session.commit()
 		return redirect(url_for('science'))
 
-@app.route('/literature')
+@app.route('/literature', methods=['GET', 'POST'])
 def literature():
 	if request.method == 'GET':
 		literature_list = session.query(Literature).all()
