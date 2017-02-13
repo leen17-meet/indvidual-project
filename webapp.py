@@ -33,8 +33,6 @@ def login():
 			flash('Incorrect Username/password combination')
 			return redirect(url_for('login'))
 
-	return render_template('login.html')
-
 @app.route('/home')
 def home():
 	return render_template("home.html")
@@ -53,6 +51,7 @@ def new():
 			flash("A user with this email address already exists")
 			return redirect(url_for('new'))
 		user = User(name = name, gender=gender, email=email)
+		user.hash_password(password)
 		session.add(user)
 		session.commit()
 		flash("User Created Successfully!")
@@ -108,5 +107,5 @@ def verify_password(email, password):
 	return True
 
 if __name__ == '__main__':
-	app.run()
+	app.run(debug = True)
 	

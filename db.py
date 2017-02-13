@@ -12,12 +12,12 @@ class User(Base):
 	name = Column(String(225))
 	gender = Column(String(225))
 	email = Column(String(225), unique=True)
-	password = Column(String(225))
+	password_hash = Column(String(225))
 	def hash_password(self, password):
 		self.password_hash = pwd_context.encrypt(password)
 
 	def verify_password(self, password):
-		return pwd_context.verify(password, self.password)
+		return pwd_context.verify(password, self.password_hash)
 
 class Science(Base):
 	__tablename__ = "science"
