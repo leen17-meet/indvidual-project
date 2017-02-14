@@ -35,37 +35,39 @@
 					<h3 align="center">Instructors in Literature</h3>
 				</div>
 				<div class="col-md-3"></div>
+				<br><br><br>
 			</div>
 			<div>
 				{% for lesson in literature %}
-					<div>
-						<div class="col-md-3" style="border : 5px solid black">
-						<center><p> Name </p></center>
+					<div class="row">
+						<div class="col-md-3" style="border : 3px solid black">
+						<p> Name </p>
 						</div>
 						<div class="col-md-1"></div>
-						<div class="col-md-3" style="border : 5px solid black">
-						<center><p> Subject </p></center>
+						<div class="col-md-3" style="border : 3px solid black">
+						<p> Subject </p>
 						</div>
 						<div class="col-md-1"></div>
-						<div class="col-md-3" style="border : 5px solid black">
-						<center><p> Information </p></center>	
+						<div class="col-md-3" style="border : 3px solid black">
+						<p> Information </p>	
 						</div>
 						<div class="col-md-1"></div>
 					</div>
-					<div>
-						<div class="col-md-1"></div>
-						<div class="col-md-3" style="border : 5px solid black">
+					<div class="row">
+						<div class="col-md-3" style="border : 3px solid black">
 						<p>{{ lesson.name }}</p>
 						</div>
 						<div class="col-md-1"></div>
-						<div class="col-md-3" style="border : 5px solid black">
+						<div class="col-md-3" style="border : 3px solid black">
 						<p>{{ lesson.subject }}</p>	
 						</div>
 						<div class="col-md-1"></div>
-						<div class="col-md-3" style="border : 5px solid black">
+						<div class="col-md-3" style="border : 3px solid black">
 						<p>{{ lesson.information }}</p>	
 						</div>
-						<div class="col-md-1"></div>
+						<div class="col-md-1"> 
+							<a href="{{ url_for('literature_delete') }}"> delete </a>
+						</div>
 					</div>
 				{% endfor %}	
 			</div>

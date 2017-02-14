@@ -23,7 +23,7 @@ def login():
 			flash ('Missing Arguments')
 			return redirect(url_for(login))
 		if verify_password(email, password):
-			customer = session.query(User).filter_by(email = email).one()
+			user = session.query(User).filter_by(email = email).one()
 			flash('Login successful, welcome %s' % user.name)
 			login_session['name'] = user.name
 			login_session['email'] = user.email
@@ -74,11 +74,21 @@ def science():
 		session.commit()
 		return redirect(url_for('science'))
 
+@app.route('/science/delete/<int:science_id>/', methods=['GET','POST'])
+def science_delete(science_id):
+	lesson = session_query(Science).filter_by(id=science_id).first()
+	if request.method == 'GET':
+		return render_template('science_delete.html', lesson=lesson)
+	else:
+		session.delete(lesson)
+		session.commit()
+		return redirect(url_for('science'))
+
 @app.route('/literature', methods=['GET', 'POST'])
 def literature():
 	if request.method == 'GET':
 		literature_list = session.query(Literature).all()
-		return render_template('literature.html', science = literature_list)
+		return render_template('literature.html', literature = literature_list)
 	else:
 		new_name = request.form['Name']
 		new_subject = request.form['Subject']
@@ -88,7 +98,17 @@ def literature():
 		session.commit()
 		return redirect(url_for('literature'))
 
-@app.route('/logout', methods = ['POST'])
+@app.route('/literature/delete/<int:literature_id>/', methods=['GET','POST'])
+def literature_delete(literature_id):
+	lesson = session_query(Literature).filter_by(id=literature_id).first()
+	if request.method == 'GET':
+		return render_template('literature_delete.html', lesson=lesson)
+	else:
+		session.delete(lesson)
+		session.commit()
+		return redirect(url_for('literature'))
+
+@app.route('/logout')
 def logout():
 	if 'id' not in login_session:
 		flash("You must be logged in order to log out")
@@ -97,7 +117,7 @@ def logout():
 	del login_session['email']
 	del login_session['id']
 	flash("Logged Out Successfully")
-	return redirect(url_for('home'))
+	return redirect(url_for('login'))
 
 def verify_password(email, password):
 	user = session.query(User).filter_by(email = email).first()
